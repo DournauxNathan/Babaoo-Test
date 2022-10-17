@@ -28,8 +28,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void GenerateRandomPosition()
     {
-        tiles[4].transform.SetAsLastSibling();
-        tiles[4].SetActive(false);
+        emptyTile.transform.SetAsLastSibling();
 
         for (int i = 0; i < tiles.Count; i++)
         {
@@ -41,6 +40,8 @@ public class GameManager : MonoBehaviour
             pieces.Add(tiles[i].transform);
             //Make the last elements of the tiles List unactive
         }
+
+        //emptyTile.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -73,9 +74,9 @@ public class GameManager : MonoBehaviour
     {
         if (Vector2.Distance(emptyTile.anchoredPosition, _transfrom.anchoredPosition) <= minimalDistance * 100)
         {
-            //Debug.Log(Vector2.Distance(emptyTile.anchoredPosition, _transfrom.anchoredPosition));
+            Debug.Log(Vector2.Distance(emptyTile.anchoredPosition, _transfrom.anchoredPosition));
             return true;
         }
-        return true;
+        return false;
     }
 }

@@ -22,7 +22,7 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
         //Disable collider
         boxCollider.enabled = false;
     }
-
+     
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (GameManager.instance.isSwappable(rectTransform))
@@ -42,7 +42,11 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
     public void OnDrag(PointerEventData eventData)
     {
         //Debug.Log("Drag");
-        if (GameManager.instance.isSwappable(rectTransform))
+        if (!GameManager.instance.isSwappable(rectTransform))
+        {
+            return;
+        }
+        else
         {
             rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
         }
