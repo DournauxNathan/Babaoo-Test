@@ -12,19 +12,17 @@ public class Cell : MonoBehaviour, IDropHandler
 
         if (eventData.pointerDrag != null)
         {
+
             //Snap the current drag objet to the this anchoredPosition
             eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
             //Set the current tile index to this cell index in hierarchy
             eventData.pointerDrag.GetComponent<Tile>().currentiD = transform.GetSiblingIndex();
 
-            if (eventData.pointerDrag.GetComponent<Tile>().currentiD == eventData.pointerDrag.GetComponent<Tile>().targetID)
+            if (eventData.pointerDrag.GetComponent<Tile>().GetComponent<Tile>().currentiD == eventData.pointerDrag.GetComponent<Tile>().GetComponent<Tile>().targetID)
             {
-                GameManager.instance.IsResolve(1);
+                eventData.pointerDrag.GetComponent<Tile>().isInRightPlace = true;
             }
-            else
-            {
-                GameManager.instance.IsResolve(-1);
-            }
+
         }
     }
 

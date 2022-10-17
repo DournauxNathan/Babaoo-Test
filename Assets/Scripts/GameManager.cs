@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
     public bool isTimerRunning;
 
     [Header("Game Refs")]
-    public int solvedAmount;
     List<int> randomIndexes = new List<int>();
     [SerializeField] private List<GameObject> tiles = new List<GameObject>();
     public RectTransform emptyTile = null;
@@ -26,7 +25,8 @@ public class GameManager : MonoBehaviour
     [Header("UI")]
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject newScore;
-    [SerializeField] private Text bestScoreText;
+    [SerializeField] private Text newBestTimeText;
+    [SerializeField] private Text bestTimeText;
     [SerializeField] private List<GameObject> feedbacks = new List<GameObject>();
 
     private void Awake()
@@ -35,7 +35,9 @@ public class GameManager : MonoBehaviour
 
         if (PersistenceData.instance != null)
         {
-            bestScoreText.text = "Best Score : " + PersistenceData.instance.bestTime;
+            float minutes = Mathf.FloorToInt(PersistenceData.instance.bestTime / 60);
+            float seconds = Mathf.FloorToInt(PersistenceData.instance.bestTime % 60);
+            bestTimeText.text = string.Format("Best time : {0:00}:{1:00}", minutes, seconds);
         }
     }
 
@@ -44,6 +46,7 @@ public class GameManager : MonoBehaviour
     {
         timeRemaining = setTimer;
         isTimerRunning = true;
+             
         GenerateRandomPosition();
     }
 
@@ -82,7 +85,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SwapTile(RectTransform _transfrom)
+    public void SwapTile(Transform _transfrom)
     {
         //Save the last index of the empty tile
         int lastEmptyTileIndex = emptyTile.GetSiblingIndex();
@@ -93,16 +96,19 @@ public class GameManager : MonoBehaviour
         _transfrom.SetSiblingIndex(lastEmptyTileIndex);
 
         emptyTile.GetComponent<Tile>().currentiD = lastTileIndex;
+        
+        Solve();
 
         //Reproduced the current image to the bottom
         DisplayImage();
     }
 
-    public bool isSwappable(RectTransform _transfrom)
+    public bool isSwappable(Transform _transfrom)
     {
-        if (Vector2.Distance(emptyTile.anchoredPosition, _transfrom.anchoredPosition) <= minimalDistance * 100)
+        if (Vector2.Distance(emptyTile.position, _transfrom.position) <= minimalDistance * 100)
         {
-            //Debug.Log(Vector2.Distance(emptyTile.anchoredPosition, _transfrom.anchoredPosition));
+            //Debug.Log(Vector2.Distance(emptyTile.position, _transfrom.position) <= minimalDistance * 100);
+            
             return true;
         }
         return false;
@@ -122,7 +128,6 @@ public class GameManager : MonoBehaviour
                 Debug.Log("Time has run out!");
                 isTimerRunning = false;
                 timeRemaining = 0;
-                resolveTime = setTimer - timeRemaining;
                 GameOver();
             }
         }
@@ -130,13 +135,26 @@ public class GameManager : MonoBehaviour
         DisplayTime(timeRemaining);
     }
 
-    public void IsResolve(int i)
+    public void Solve()
     {
-        solvedAmount += i;
+        int correctTile = 0;
+        Debug.Log(correctTile);
 
-        if (solvedAmount == tiles.Count)
+        foreach (var tile in tiles)
+        {
+            if (tile != null)
+            {
+                if (tile.GetComponent<Tile>().isInRightPlace)
+                    correctTile++;
+            }
+        }
+
+        if (correctTile == (tiles.Count - 1))
         {
             Debug.Log("Solved");
+
+            resolveTime = setTimer - timeRemaining;
+
             GameOver();
         }
     }
@@ -159,7 +177,10 @@ public class GameManager : MonoBehaviour
 
             PersistenceData.instance.bestTime = resolveTime;
 
-            bestScoreText.text = "Best Score : " + PersistenceData.instance.bestTime;
+            float minutes = Mathf.FloorToInt(PersistenceData.instance.bestTime / 60);
+            float seconds = Mathf.FloorToInt(PersistenceData.instance.bestTime % 60);
+            newBestTimeText.text = string.Format("Best Score : {0:00}:{1:00}", minutes, seconds);
+            
         }
     }
 

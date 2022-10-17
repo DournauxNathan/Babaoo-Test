@@ -9,6 +9,7 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
     [SerializeField] private Canvas canvas;
     public int currentiD;
     public int targetID;
+    public bool isInRightPlace;
 
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
@@ -25,11 +26,11 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
         boxCollider.enabled = false;
     }
 
-    private void Start()
+    private void LateUpdate()
     {
         if (currentiD == targetID)
         {
-            GameManager.instance.IsResolve(1);
+            isInRightPlace = true;
         }
     }
 
