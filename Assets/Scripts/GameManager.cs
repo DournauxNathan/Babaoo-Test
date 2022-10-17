@@ -89,14 +89,15 @@ public class GameManager : MonoBehaviour
     {
         //Save the last index of the empty tile
         int lastEmptyTileIndex = emptyTile.GetSiblingIndex();
+        //Save the last tile index
         int lastTileIndex = _transfrom.GetSiblingIndex();
 
+        //ID Swap
         emptyTile.SetSiblingIndex(_transfrom.GetSiblingIndex());
-
         _transfrom.SetSiblingIndex(lastEmptyTileIndex);
-
         emptyTile.GetComponent<Tile>().currentiD = lastTileIndex;
         
+        //Check if the puzzle is solved after a movement
         Solve();
 
         //Reproduced the current image to the bottom
@@ -126,8 +127,10 @@ public class GameManager : MonoBehaviour
             else
             {
                 Debug.Log("Time has run out!");
+
                 isTimerRunning = false;
                 timeRemaining = 0;
+                
                 GameOver();
             }
         }
@@ -166,10 +169,11 @@ public class GameManager : MonoBehaviour
         isGameOver = true;
         gameOverPanel.SetActive(true);
 
-        UpdateScore();
+        //Update the best time (Save Persistent data)
+        UpdateTime();
     }
 
-    public void UpdateScore()
+    public void UpdateTime()
     {
         if (resolveTime < PersistenceData.instance.bestTime)
         {
@@ -186,6 +190,7 @@ public class GameManager : MonoBehaviour
 
     public void Save()
     {
+        //Save the best time when the player click on Restart or Home
         PersistenceData.instance.Save();
     }
 

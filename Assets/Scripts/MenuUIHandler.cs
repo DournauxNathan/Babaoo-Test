@@ -12,12 +12,14 @@ public class MenuUIHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Display the best time if there already a best
         if (PersistenceData.instance.bestTime > 0)
         {
             float minutes = Mathf.FloorToInt(PersistenceData.instance.bestTime / 60);
             float seconds = Mathf.FloorToInt(PersistenceData.instance.bestTime % 60);
             bestTimeText.text = string.Format("Best Score : {0:00}:{1:00}", minutes, seconds);
         }
+        //else Display nothing
         else
         {
             bestTimeText.text = string.Empty;

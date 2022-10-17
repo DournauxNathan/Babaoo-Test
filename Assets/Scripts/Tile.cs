@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
 public class Tile : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
     [SerializeField] private Canvas canvas;
+
+    [Header("Tile Data")]
     public int currentiD;
     public int targetID;
     public bool isInRightPlace;
@@ -34,6 +36,8 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
         }
     }
 
+    #region UI / Input Events
+    
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (GameManager.instance.isSwappable(rectTransform))
@@ -80,4 +84,6 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
     {
         //Debug.Log("PointerDown");
     }
+
+    #endregion
 }
