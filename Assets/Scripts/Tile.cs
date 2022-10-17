@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
 public class Tile : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
     [SerializeField] private Canvas canvas;
+    public int currentiD;
+    public int targetID;
 
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
@@ -22,7 +24,15 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
         //Disable collider
         boxCollider.enabled = false;
     }
-     
+
+    private void Start()
+    {
+        if (currentiD == targetID)
+        {
+            GameManager.instance.IsResolve(1);
+        }
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (GameManager.instance.isSwappable(rectTransform))
