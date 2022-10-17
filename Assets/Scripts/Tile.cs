@@ -34,7 +34,7 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
 
             //Set the image's alpha
             canvasGroup.alpha = .6f;
-            //Disable collision with raycats
+            //Disable collision with raycasts
             canvasGroup.blocksRaycasts = false;
         }
     }
@@ -55,9 +55,14 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
     public void OnEndDrag(PointerEventData eventData)
     {
         //Debug.Log("EndDrag");
+
         //Set the image's alpha back to 1
         canvasGroup.alpha = 1f;
+        //Enable collision with raycasts
         canvasGroup.blocksRaycasts = true;
+
+        //
+        GameManager.instance.SwapTile(rectTransform);
     }
 
     public void OnPointerDown(PointerEventData eventData)
